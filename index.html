@@ -44,11 +44,16 @@
             font-weight: bold;
             display: none;
         }
+        .voted-message {
+            font-size: 1.2em;
+            color: red;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <h1>Vote for Your Candidate</h1>
-    <div class="button-container">
+    <div class="button-container" id="vote-buttons">
         <button class="meraj" onclick="vote('meraj')">MERAJ RAHMAN - GRAND NATIONAL FORCE</button>
         <button class="emad" onclick="vote('emad')">EMAD SYED - DEMOCRATIC FRONT</button>
     </div>
@@ -56,12 +61,19 @@
         <button class="results" id="showResultsBtn" onclick="showResults()">Show Results</button>
     </div>
     <div id="results-container"></div>
+    <div id="voted-message" class="voted-message"></div>
 
     <script>
         // Initialize vote counts
         let merajVotes = parseInt(localStorage.getItem('merajVotes')) || 0;
         let emadVotes = parseInt(localStorage.getItem('emadVotes')) || 0;
         let emadCounter = parseInt(localStorage.getItem('emadCounter')) || 0;
+
+        // Check if the user has already voted
+        if (localStorage.getItem('hasVoted') === 'true') {
+            document.getElementById('vote-buttons').style.display = 'none'; // Hide vote buttons
+            document.getElementById('voted-message').innerText = 'You have already voted!';
+        }
 
         // Voting function
         function vote(candidate) {
@@ -75,12 +87,16 @@
                     emadVotes++;
                 }
             }
+
             // Save to localStorage
             localStorage.setItem('merajVotes', merajVotes);
             localStorage.setItem('emadVotes', emadVotes);
             localStorage.setItem('emadCounter', emadCounter);
+            localStorage.setItem('hasVoted', 'true'); // Mark that the user has voted
 
             alert("Your vote has been recorded. Thank you!");
+            document.getElementById('vote-buttons').style.display = 'none'; // Hide vote buttons
+            document.getElementById('voted-message').innerText = 'You have already voted!';
         }
 
         // Show results (only visible to you when enabled)
