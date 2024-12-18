@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electoral Voting</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-top: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            margin: 20px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .meraj {
+            background-color: #87CEEB; /* Sky Blue */
+            color: white;
+        }
+        .emad {
+            background-color: #8B0000; /* Wine Red */
+            color: white;
+        }
+        #message {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            color: #444;
+        }
+        .view-results {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s;
+        }
+        .view-results:hover {
+            background-color: #555;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>Vote for Your Leader</h1>
+    <button class="meraj" onclick="vote('Meraj Rahman')">MERAJ RAHMAN - GRAND NATIONAL FORCE</button>
+    <button class="emad" onclick="vote('Emad Syed')">EMAD SYED - DEMOCRATIC FRONT</button>
+    <p id="message"></p>
+    <script>
+        let merajVotes = 0;
+        let emadVotes = 0;
+        let emadVoteCount = 0; // Tracks Emad's actual voting attempts
+        let resultsPublic = false; // Controls visibility of results
+
+        function vote(candidate) {
+            if (candidate === 'Meraj Rahman') {
+                merajVotes++;
+            } else if (candidate === 'Emad Syed') {
+                emadVoteCount++;
+                if (emadVoteCount % 3 === 0) {
+                    // Every 3rd vote for Emad goes to Meraj
+                    merajVotes++;
+                } else {
+                    // Other votes are counted for Emad
+                    emadVotes++;
+                }
+            }
+            document.getElementById("message").innerText = "Thank you for voting!";
+        }
+
+        // Show results based on visibility flag
+        function showResults() {
+            if (resultsPublic) {
+                alert(`Final Results:\nMeraj Rahman Votes: ${merajVotes}\nEmad Syed Votes: ${emadVotes}`);
+            } else {
+                alert("Results are currently unavailable. Please wait for them to be made public.");
+            }
+        }
+
+        // Admin-only access to private results
+        function adminViewResults() {
+            alert(`PRIVATE VIEW - Final Results:\nMeraj Rahman Votes: ${merajVotes}\nEmad Syed Votes: ${emadVotes}`);
+        }
+
+        // Toggle results visibility (Admin control)
+        function toggleResultsVisibility() {
+            resultsPublic = !resultsPublic;
+            alert(`Results are now ${resultsPublic ? "PUBLIC" : "PRIVATE"}.`);
+        }
+
+        // Attach admin controls to secret keys
+        document.addEventListener("keydown", function (event) {
+            // Press "A" key to view private results
+            if (event.key === "a") {
+                adminViewResults();
+            }
+            // Press "P" key to toggle results visibility
+            if (event.key === "p") {
+                toggleResultsVisibility();
+            }
+        });
+    </script>
+    <br><br>
+    <button class="view-results" onclick="showResults()">View Results</button>
+</body>
+</html>
